@@ -21,13 +21,13 @@ int inference_count = 0;
 void setup() {
   Serial.begin(9600);
   while (!Serial) {}
-  Serial.println("begin");
   TfLiteMicro.begin(g_sine_model_data);
+  Serial.println("model loaded");
 }
 
 void loop() {
   if (TfLiteMicro.failed()) {
-    Serial.print("TfLite error:");
+    Serial.print("TfLiteMicro error:");
     Serial.println(TfLiteMicro.error());
   } 
   float t = (float)inference_count / 2048.0f;
