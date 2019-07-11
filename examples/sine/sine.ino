@@ -20,9 +20,7 @@ int inference_count = 0;
 
 void setup() {
   Serial.begin(9600);
-  while (!Serial) {}
   TfLiteMicro.begin(g_sine_model_data);
-  Serial.println("model loaded");
 }
 
 void loop() {
@@ -34,7 +32,6 @@ void loop() {
   float x_val = t * 2 * M_PI;
   TfLiteMicro.inputFloat(0)[0] = x_val;
   TfLiteMicro.invoke();
-  Serial.print("sin:");
   Serial.println(TfLiteMicro.outputFloat(0)[0]);
   inference_count = (inference_count + 1) & 0x7ff;
 }
