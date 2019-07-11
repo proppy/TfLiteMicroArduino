@@ -29,8 +29,8 @@ void loop() {
     Serial.println(TfLiteMicro.error());
   } 
   float t = (float)inference_count / 2048.0f;
-  float x_val = t * 2 * M_PI;
-  TfLiteMicro.inputFloat(0)[0] = x_val;
+  float x = t * 2 * M_PI;
+  TfLiteMicro.inputFloat(0)[0] = x;
   TfLiteMicro.invoke();
   Serial.println(TfLiteMicro.outputFloat(0)[0]);
   inference_count = (inference_count + 1) & 0x7ff;
