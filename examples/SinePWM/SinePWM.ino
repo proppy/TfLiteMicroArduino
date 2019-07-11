@@ -16,7 +16,7 @@ limitations under the License.
 #include "TfLiteMicroArduino.h"
 #include "sine_model_data.h"
 
-int inference_count = 0;
+float angle = 0.0f;
 
 void setup() {
   Serial.begin(9600);
@@ -28,12 +28,13 @@ void loop() {
   if (TfLiteMicro.failed()) {
     Serial.print("TfLiteMicro error:");
     Serial.println(TfLiteMicro.error());
-  } 
-  float t = (float)inference_count / 2048.0f;
-  float x = t * 2 * M_PI;
-  TfLiteMicro.inputFloat(0)[0] = x;
+  }
+  TfLiteMicro.inputFloat(0)[0] = angle;
   TfLiteMicro.invoke();
   float y = TfLiteMicro.outputFloat(0)[0];
   pwmWrite(PB9, 65535 * (y + 1.0f) / 2.0f);
-  inference_count = (inference_count + 1) & 0x7ff;
+  angle += 0.01f;
+  if (angle > 2 * M_PI) {
+    angle = 0.0f;
+  }
 }
