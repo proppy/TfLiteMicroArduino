@@ -6,3 +6,5 @@ Doxyfile*
 doxygen_sqlite3.db
 html
 *.tmp
+env/
+.ipynb_checkpoints/
