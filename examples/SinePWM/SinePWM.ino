@@ -20,7 +20,7 @@ float angle = 0.0f;
 
 void setup() {
   Serial.begin(9600);
-  TfLiteMicro.begin(g_sine_model_data);
+  TfLiteMicro.begin(sine_model_data_tflite);
   pinMode(PB9, PWM);
 }
 
