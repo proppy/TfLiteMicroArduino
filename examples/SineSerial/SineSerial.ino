@@ -27,6 +27,7 @@ void loop() {
   if (TfLiteMicro.failed()) {
     Serial.print("TfLiteMicro error:");
     Serial.println(TfLiteMicro.error());
+    return;
   }
   TfLiteMicro.inputFloat(0)[0] = angle;
   TfLiteMicro.invoke();
