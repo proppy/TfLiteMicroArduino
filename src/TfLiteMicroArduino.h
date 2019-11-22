@@ -29,12 +29,11 @@ class TfLiteMicroArduino {
   tflite::ops::micro::AllOpsResolver resolver_;
   tflite::ErrorReporter* error_reporter_;
   uint8_t* tensor_arena_;
-  tflite::SimpleTensorAllocator* tensor_allocator_;
   tflite::MicroInterpreter* interpreter_;
   TfLiteStatus status_ = kTfLiteError;
   String error_ = "NO_INTERPRETER";
  public:
-  void begin(const uint8_t* model_data, int tensor_arena_size = 2 * 1024) {
+  void begin(const uint8_t* model_data, size_t tensor_arena_size = 2 * 1024) {
     error_reporter_ = new tflite::MicroErrorReporter();
     const tflite::Model* model = ::tflite::GetModel(model_data);
     if (model->version() != TFLITE_SCHEMA_VERSION) {
@@ -47,9 +46,12 @@ class TfLiteMicroArduino {
       return;
     }
     tensor_arena_ = new uint8_t[tensor_arena_size];
-    tensor_allocator_ = new tflite::SimpleTensorAllocator(tensor_arena_, tensor_arena_size);
-    interpreter_ = new tflite::MicroInterpreter(model, resolver_, tensor_allocator_, error_reporter_);
-    status_ = kTfLiteOk;
+    interpreter_ = new tflite::MicroInterpreter(model, resolver_, tensor_arena_, tensor_arena_size, error_reporter_);
+    status_ = interpreter_->AllocateTensors();
+    if (status_ != kTfLiteOk) {
+      error_ = "ALLOCATE_TENSOR_ERROR";
+      return;
+    }
   }
   bool failed() {
     return status_ != kTfLiteOk;
@@ -80,10 +82,6 @@ class TfLiteMicroArduino {
     if (interpreter_) {
       delete(interpreter_);
       interpreter_ = nullptr;
-    }
-    if (tensor_allocator_) {
-      delete(tensor_allocator_);
-      tensor_allocator_ = nullptr;
     }
     if (tensor_arena_) {
       delete(tensor_arena_);
