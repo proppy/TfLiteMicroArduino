@@ -1,4 +1,4 @@
-/* Copyright 2018 The TensorFlow Authors. All Rights Reserved.
+/* Copyright 2019 The TensorFlow Authors. All Rights Reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -29,5 +29,10 @@ limitations under the License.
 // On Arduino platforms, we set up a serial port and write to it for debug
 // logging.
 extern "C" void DebugLog(const char* s) {
+  static bool is_initialized = false;
+  if (!is_initialized) {
+    DEBUG_SERIAL_OBJECT.begin(9600);
+    is_initialized = true;
+  }
   DEBUG_SERIAL_OBJECT.print(s);
 }

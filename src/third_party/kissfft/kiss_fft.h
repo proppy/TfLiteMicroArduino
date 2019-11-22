@@ -4,8 +4,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
-#include <string.h>
-#include <stdint.h>
+//#include <string.h> /* Patched by helper_functions.inc for Arduino compatibility */
 
 #ifdef __cplusplus
 extern "C" {

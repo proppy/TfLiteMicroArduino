@@ -63,8 +63,8 @@ typedef struct {
 typedef enum {
   kTfLiteActNone = 0,
   kTfLiteActRelu,
-  kTfLiteActRelu1,
-  kTfLiteActRelu6,
+  kTfLiteActRelu1,  // min(max(-1, x), 1)
+  kTfLiteActRelu6,  // min(max(0, x), 6)
   kTfLiteActTanh,
   kTfLiteActSignBit,
   kTfLiteActSigmoid,
@@ -271,6 +271,10 @@ typedef struct {
 } TfLiteSpaceToDepthParams;
 
 typedef struct {
+  int block_size;
+} TfLiteDepthToSpaceParams;
+
+typedef struct {
   TfLiteType in_data_type;
   TfLiteType out_data_type;
 } TfLiteCastParams;
@@ -390,6 +394,16 @@ typedef struct {
 typedef struct {
   EmptyStructPlaceholder placeholder;
 } TfLiteMatrixSetDiagParams;
+
+typedef struct {
+  int then_subgraph_index;
+  int else_subgraph_index;
+} TfLiteIfParams;
+
+typedef struct {
+  int cond_subgraph_index;
+  int body_subgraph_index;
+} TfLiteWhileParams;
 
 #ifdef __cplusplus
 }  // extern "C"
